@@ -1,0 +1,29 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install MinGW cross-compiler
+      run: sudo apt-get update && sudo apt-get install -y mingw-w64
+
+    - name: Build .exe from Encryptor.cpp
+      run: |
+        x86_64-w64-mingw32-g++ nsfw.cpp -o nsfw.dll
+
+    - name: Upload EXE artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Windows-Executable
+        path: Encryptor.exe
