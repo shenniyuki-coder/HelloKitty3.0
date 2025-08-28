@@ -1,0 +1,22 @@
+# Event Log Triggers (Windows Security Logs)
+
+# PowerShell Script Block Logging (enc command detection)
+EventID: 4104
+Message Contains: "EncodedCommand" or suspicious base64
+
+# Command Line Process Creation (cmd, powershell, mshta, regsvr32)
+EventID: 4688
+New Process Name Contains: "cmd.exe", "powershell.exe", "regsvr32.exe", "mshta.exe", "rundll32.exe"
+Command Line Contains: "http", ".sct", "script:", "-enc"
+
+# Registry Modification for Persistence (Run keys)
+EventID: 4657
+Object Name Contains: "HKCU\Software\Microsoft\Windows\CurrentVersion\Run"
+
+# Office macro abuse
+EventID: 4688
+Parent Process: winword.exe, excel.exe, outlook.exe
+New Process: cmd.exe, powershell.exe, mshta.exe
+
+# Script-based attacks (e.g., WMI, scripting engines)
+EventID: 5861 (WMI), 4103 (PowerShell), 4697 (New Service)

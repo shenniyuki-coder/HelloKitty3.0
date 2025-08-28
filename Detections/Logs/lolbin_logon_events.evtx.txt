@@ -1,0 +1,19 @@
+# Suspicious Logon Patterns
+
+# Unusual Logon Types (e.g., remote interactive)
+EventID: 4624
+Logon Type: 3 (network), 10 (remote interactive)
+Account Name: [non-admin using LOLBins]
+
+# Logon with explicit credentials (possible lateral movement)
+EventID: 4648
+Target Server: Remote machine name or domain controller
+Authentication Package: NTLM or Kerberos
+
+# Credential Theft Detection (Mimikatz, etc)
+EventID: 4672 (Special privileges assigned to new logon)
+EventID: 4688 (lsass.exe spawned suspiciously)
+
+# New Service Install (e.g., LOLBin persistence)
+EventID: 4697
+Service Name Contains: random or suspicious binaries (like regsvr32 or rundll32)
