@@ -1,7 +1,0 @@
-volatility -f memdump.raw malfind --dump-dir=./dump
-
-
-volatility -f memdump.raw modules | grep -E 'rundll32|regsvr32|mshta'
-
-
-volatility -f memdump.raw netscan | grep -E 'rundll32|powershell'
