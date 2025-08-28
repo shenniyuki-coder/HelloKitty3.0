@@ -1,0 +1,17 @@
+title: Suspicious LOLBin Usage
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    Image|endswith:
+      - '\certutil.exe'
+      - '\regsvr32.exe'
+      - '\rundll32.exe'
+      - '\mshta.exe'
+  condition: selection
+fields:
+  - CommandLine
+  - ParentImage
+  - User
+level: high
