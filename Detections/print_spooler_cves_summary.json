@@ -1,0 +1,44 @@
+[
+  {
+    "Year":"2009\u20132012",
+    "CVE IDs":"CVE\u20112009\u20110229, CVE\u20112009\u20110230, CVE\u20112010\u20112729, CVE\u20112012\u20111851",
+    "Type":"Privilege escalation, DLL hijack, info disclosure",
+    "Impact":"Local \/ system compromise"
+  },
+  {
+    "Year":"2013\u20132016",
+    "CVE IDs":"CVE\u20112013\u20110011, CVE\u20112013\u20111339, CVE\u20112016\u20113238, CVE\u20112016\u20113239",
+    "Type":"Privilege escalation via improper job handling",
+    "Impact":"Local \/ system compromise"
+  },
+  {
+    "Year":"2019\u20132020",
+    "CVE IDs":"CVE\u20112019\u20110759, CVE\u20112020\u20111030, CVE\u20112020\u20111048, CVE\u20112020\u20111070, CVE\u20112020\u20111337, CVE\u20112020\u201117001, CVE\u20112020\u201117014, CVE\u20112020\u201117042",
+    "Type":"Privilege escalation, unquoted path, info disclosure",
+    "Impact":"Local \/ system compromise"
+  },
+  {
+    "Year":"2021",
+    "CVE IDs":"CVE\u20112021\u20111640, CVE\u20112021\u20111675, CVE\u20112021\u201134481, CVE\u20112021\u201134527, CVE\u20112021\u201136936, CVE\u20112021\u201136947, CVE\u20112021\u201136958",
+    "Type":"PrintNightmare, RCE\/EoP",
+    "Impact":"Remote\/Local code execution"
+  },
+  {
+    "Year":"2022",
+    "CVE IDs":"CVE\u20112022\u201121958, CVE\u20112022\u201121997, CVE\u20112022\u201121999, CVE\u20112022\u201122022, CVE\u20112022\u201122041, CVE\u20112022\u201122717, CVE\u20112022\u201122718, CVE\u20112022\u201123284, CVE\u20112022\u201126790\u2013CVE\u20112022\u201126801, CVE\u20112022\u201138028",
+    "Type":"Privilege escalation, symbolic link abuse, RCE",
+    "Impact":"Local \/ system compromise"
+  },
+  {
+    "Year":"2023\u20132024",
+    "CVE IDs":"CVE\u20112024\u201121433, CVE\u20112024\u201138198, CVE\u20112024\u201143529",
+    "Type":"Privilege escalation, job handling",
+    "Impact":"Local \/ system compromise"
+  },
+  {
+    "Year":"2025",
+    "CVE IDs":"CVE\u20112025\u201149722",
+    "Type":"Denial of Service",
+    "Impact":"Local service disruption"
+  }
+]

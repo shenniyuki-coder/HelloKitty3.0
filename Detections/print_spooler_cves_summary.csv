@@ -1,0 +1,8 @@
+Year,CVE IDs,Type,Impact
+2009–2012,"CVE‑2009‑0229, CVE‑2009‑0230, CVE‑2010‑2729, CVE‑2012‑1851","Privilege escalation, DLL hijack, info disclosure",Local / system compromise
+2013–2016,"CVE‑2013‑0011, CVE‑2013‑1339, CVE‑2016‑3238, CVE‑2016‑3239",Privilege escalation via improper job handling,Local / system compromise
+2019–2020,"CVE‑2019‑0759, CVE‑2020‑1030, CVE‑2020‑1048, CVE‑2020‑1070, CVE‑2020‑1337, CVE‑2020‑17001, CVE‑2020‑17014, CVE‑2020‑17042","Privilege escalation, unquoted path, info disclosure",Local / system compromise
+2021,"CVE‑2021‑1640, CVE‑2021‑1675, CVE‑2021‑34481, CVE‑2021‑34527, CVE‑2021‑36936, CVE‑2021‑36947, CVE‑2021‑36958","PrintNightmare, RCE/EoP",Remote/Local code execution
+2022,"CVE‑2022‑21958, CVE‑2022‑21997, CVE‑2022‑21999, CVE‑2022‑22022, CVE‑2022‑22041, CVE‑2022‑22717, CVE‑2022‑22718, CVE‑2022‑23284, CVE‑2022‑26790–CVE‑2022‑26801, CVE‑2022‑38028","Privilege escalation, symbolic link abuse, RCE",Local / system compromise
+2023–2024,"CVE‑2024‑21433, CVE‑2024‑38198, CVE‑2024‑43529","Privilege escalation, job handling",Local / system compromise
+2025,CVE‑2025‑49722,Denial of Service,Local service disruption

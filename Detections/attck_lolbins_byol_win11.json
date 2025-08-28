@@ -1,0 +1,401 @@
+{
+  "version": "2025-08-20",
+  "platform": "Windows 11",
+  "source": "LOLBins/BYOL coverage (defense-focused)",
+  "tactics": {
+    "Reconnaissance": [
+      {
+        "technique_id": "T1592",
+        "technique": "Gather Victim Host Information",
+        "examples": [
+          "powershell.exe"
+        ],
+        "detections": [
+          "PowerShell script block logging"
+        ],
+        "controls": [
+          "Constrained Language Mode",
+          "ASR: Block PS abuse"
+        ]
+      },
+      {
+        "technique_id": "T1590",
+        "technique": "Gather Victim Network Information",
+        "examples": [
+          "powershell.exe",
+          "net.exe"
+        ],
+        "detections": [
+          "Event logs 800, 4104"
+        ],
+        "controls": [
+          "Least privilege",
+          "WDAC rules"
+        ]
+      }
+    ],
+    "Resource Development": [
+      {
+        "technique_id": "T1587",
+        "technique": "Develop Capabilities",
+        "examples": [
+          "BYOL vulnerable driver"
+        ],
+        "detections": [
+          "Driver load events"
+        ],
+        "controls": [
+          "Microsoft Vulnerable Driver Blocklist"
+        ]
+      }
+    ],
+    "Initial Access": [
+      {
+        "technique_id": "T1189",
+        "technique": "Drive-by Compromise",
+        "examples": [
+          "mshta.exe"
+        ],
+        "detections": [
+          "Browser spawning mshta"
+        ],
+        "controls": [
+          "Block mshta via WDAC"
+        ]
+      },
+      {
+        "technique_id": "T1204",
+        "technique": "User Execution",
+        "examples": [
+          "rundll32.exe",
+          "wscript.exe"
+        ],
+        "detections": [
+          "Office -> script interpreter chain"
+        ],
+        "controls": [
+          "ASR: Block Office child processes"
+        ]
+      }
+    ],
+    "Execution": [
+      {
+        "technique_id": "T1059.001",
+        "technique": "PowerShell",
+        "examples": [
+          "powershell.exe"
+        ],
+        "detections": [
+          "4104, 4103"
+        ],
+        "controls": [
+          "CLM",
+          "AMSI on"
+        ]
+      },
+      {
+        "technique_id": "T1218.005",
+        "technique": "Mshta",
+        "examples": [
+          "mshta.exe"
+        ],
+        "detections": [
+          "Process ancestry alerts"
+        ],
+        "controls": [
+          "WDAC/AppLocker"
+        ]
+      },
+      {
+        "technique_id": "T1218.011",
+        "technique": "Rundll32",
+        "examples": [
+          "rundll32.exe"
+        ],
+        "detections": [
+          "DLL path outside System32"
+        ],
+        "controls": [
+          "Block non-Microsoft DLLs"
+        ]
+      },
+      {
+        "technique_id": "T1218.010",
+        "technique": "Regsvr32",
+        "examples": [
+          "regsvr32.exe"
+        ],
+        "detections": [
+          "/s /u /i with remote scrobj"
+        ],
+        "controls": [
+          "Block scriptlets"
+        ]
+      }
+    ],
+    "Persistence": [
+      {
+        "technique_id": "T1053.005",
+        "technique": "Scheduled Task",
+        "examples": [
+          "schtasks.exe"
+        ],
+        "detections": [
+          "Security 4698"
+        ],
+        "controls": [
+          "Restrict task creation"
+        ]
+      },
+      {
+        "technique_id": "T1547.001",
+        "technique": "Registry Run Keys",
+        "examples": [
+          "powershell.exe",
+          "reg.exe"
+        ],
+        "detections": [
+          "Sysmon 13"
+        ],
+        "controls": [
+          "WDAC",
+          "Registry ACLs"
+        ]
+      },
+      {
+        "technique_id": "T1137.001",
+        "technique": "Office Add-ins",
+        "examples": [
+          "BYOL Office add-in"
+        ],
+        "detections": [
+          "Office add-in load logs"
+        ],
+        "controls": [
+          "Signed add-ins only"
+        ]
+      }
+    ],
+    "Privilege Escalation": [
+      {
+        "technique_id": "T1543.003",
+        "technique": "Create or Modify System Process: Windows Service",
+        "examples": [
+          "sc.exe",
+          "psexec.exe"
+        ],
+        "detections": [
+          "7045"
+        ],
+        "controls": [
+          "Service creation restrictions"
+        ]
+      },
+      {
+        "technique_id": "T1068",
+        "technique": "Exploitation for Privilege Escalation",
+        "examples": [
+          "BYOL vulnerable driver"
+        ],
+        "detections": [
+          "Kernel driver loads"
+        ],
+        "controls": [
+          "Driver blocklist"
+        ]
+      }
+    ],
+    "Defense Evasion": [
+      {
+        "technique_id": "T1036",
+        "technique": "Masquerading",
+        "examples": [
+          "forfiles.exe"
+        ],
+        "detections": [
+          "File path anomalies"
+        ],
+        "controls": [
+          "App control"
+        ]
+      },
+      {
+        "technique_id": "T1218",
+        "technique": "Signed Binary Proxy Execution",
+        "examples": [
+          "desktopimgdownldr.exe",
+          "odbcconf.exe"
+        ],
+        "detections": [
+          "Unusual parents"
+        ],
+        "controls": [
+          "Block rarely used LOLBins"
+        ]
+      },
+      {
+        "technique_id": "T1553",
+        "technique": "Subvert Trust Controls",
+        "examples": [
+          "Old signed binaries"
+        ],
+        "detections": [
+          "Signer mismatch"
+        ],
+        "controls": [
+          "Smart App Control"
+        ]
+      }
+    ],
+    "Credential Access": [
+      {
+        "technique_id": "T1003.001",
+        "technique": "LSASS Memory",
+        "examples": [
+          "rundll32.exe",
+          "procdump.exe"
+        ],
+        "detections": [
+          "Sysmon 10"
+        ],
+        "controls": [
+          "ASR LSASS credential theft"
+        ]
+      }
+    ],
+    "Discovery": [
+      {
+        "technique_id": "T1082",
+        "technique": "System Information Discovery",
+        "examples": [
+          "systeminfo",
+          "wmic.exe"
+        ],
+        "detections": [
+          "Process command-line"
+        ],
+        "controls": [
+          "Block WMIC"
+        ]
+      },
+      {
+        "technique_id": "T1046",
+        "technique": "Network Service Scanning",
+        "examples": [
+          "powershell.exe"
+        ],
+        "detections": [
+          "Firewall logs"
+        ],
+        "controls": [
+          "Egress filtering"
+        ]
+      }
+    ],
+    "Lateral Movement": [
+      {
+        "technique_id": "T1021.002",
+        "technique": "SMB/Windows Admin Shares",
+        "examples": [
+          "psexec.exe",
+          "wmic.exe"
+        ],
+        "detections": [
+          "4624/4672 anomalies"
+        ],
+        "controls": [
+          "Admin share restrictions"
+        ]
+      }
+    ],
+    "Collection": [
+      {
+        "technique_id": "T1119",
+        "technique": "Automated Collection",
+        "examples": [
+          "powershell.exe"
+        ],
+        "detections": [
+          "Large directory reads"
+        ],
+        "controls": [
+          "DLP rules"
+        ]
+      }
+    ],
+    "Command and Control": [
+      {
+        "technique_id": "T1105",
+        "technique": "Ingress Tool Transfer",
+        "examples": [
+          "certutil.exe",
+          "bitsadmin.exe",
+          "curl.exe"
+        ],
+        "detections": [
+          "Web requests by system utilities"
+        ],
+        "controls": [
+          "Block outbound for these apps"
+        ]
+      },
+      {
+        "technique_id": "T1573",
+        "technique": "Encrypted Channel",
+        "examples": [
+          "curl.exe"
+        ],
+        "detections": [
+          "JA3/JA4 anomalies"
+        ],
+        "controls": [
+          "TLS inspection per policy"
+        ]
+      }
+    ],
+    "Exfiltration": [
+      {
+        "technique_id": "T1041",
+        "technique": "Exfiltration Over C2 Channel",
+        "examples": [
+          "curl.exe"
+        ],
+        "detections": [
+          "High-volume egress"
+        ],
+        "controls": [
+          "Rate limits, DLP"
+        ]
+      },
+      {
+        "technique_id": "T1197",
+        "technique": "BITS Jobs",
+        "examples": [
+          "bitsadmin.exe"
+        ],
+        "detections": [
+          "BITS job audit"
+        ],
+        "controls": [
+          "Disable bitsadmin"
+        ]
+      }
+    ],
+    "Impact": [
+      {
+        "technique_id": "T1490",
+        "technique": "Inhibit System Recovery",
+        "examples": [
+          "wmic.exe",
+          "vssadmin.exe"
+        ],
+        "detections": [
+          "Event 25 VSS"
+        ],
+        "controls": [
+          "Restrict VSS tools"
+        ]
+      }
+    ]
+  }
+}
