@@ -147,19 +147,6 @@ bool execute_in_memory(BYTE* payload, SIZE_T size) {
     return true;
 }
 
-// ==================== AUTONOMOUS AI AGENT LOGIC ====================
-std::string agent_process_input(const std::string& input) {
-    if (input == "status") return "Agent active";
-    if (input == "encrypt") return "Ready to encrypt data";
-    if (input == "kill") return "Monitoring targets";
-    if (input.find("calc:") == 0) {
-        try {
-            double val = std::stod(input.substr(5));
-            return "Calculated squared: " + std::to_string(val * val);
-        } catch (...) { return "Invalid calculation"; }
-    }
-    return "Processed: " + input;
-}
 
 // ==================== DLL EXPORT ====================
 extern "C" __declspec(dllexport) void agent_full_routine(
