@@ -1,4 +1,4 @@
-name: Build Windows DLL
+name: Build Windows DLL and EXE
 
 on:
   push:
@@ -22,8 +22,18 @@ jobs:
         run: |
           x86_64-w64-mingw32-g++ -shared -o nsfw.dll nsfw.cpp
 
+      - name: Build nsfw.exe from nsfw.cpp
+        run: |
+          x86_64-w64-mingw32-g++ -o nsfw.exe nsfw.cpp
+
       - name: Upload DLL artifact
         uses: actions/upload-artifact@v4
         with:
           name: Windows-DLL
           path: nsfw.dll
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-EXE
+          path: nsfw.exe
