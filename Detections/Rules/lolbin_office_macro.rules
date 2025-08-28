@@ -1,0 +1,8 @@
+# Detect msword spawning cmd or powershell (indicative of macro abuse)
+alert tcp any any -> any any (msg:"LOLBIN - Word Macro spawning CMD"; content:"winword.exe"; nocase; content:"cmd.exe"; within:100; nocase; classtype:trojan-activity; sid:1000021; rev:1;)
+
+# Detect excel launching powershell
+alert tcp any any -> any any (msg:"LOLBIN - Excel launching PowerShell"; content:"excel.exe"; nocase; content:"powershell.exe"; within:100; nocase; classtype:trojan-activity; sid:1000022; rev:1;)
+
+# Detect Outlook launching mshta
+alert tcp any any -> any any (msg:"LOLBIN - Outlook launching mshta"; content:"outlook.exe"; nocase; content:"mshta.exe"; within:100; nocase; classtype:trojan-activity; sid:1000023; rev:1;)

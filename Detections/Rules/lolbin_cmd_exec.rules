@@ -1,0 +1,8 @@
+# Detect cmd.exe usage with suspicious switches
+alert tcp any any -> any any (msg:"LOLBIN - Suspicious cmd.exe Usage"; content:"cmd.exe"; nocase; content:"/c"; within:20; nocase; classtype:trojan-activity; sid:1000001; rev:1;)
+
+# Detect powershell encoded command
+alert tcp any any -> any any (msg:"LOLBIN - Encoded PowerShell Command"; content:"powershell"; nocase; content:"-enc"; within:30; nocase; classtype:trojan-activity; sid:1000002; rev:1;)
+
+# Detect mshta loading remote script
+alert tcp any any -> any any (msg:"LOLBIN - mshta Remote Script Execution"; content:"mshta.exe"; nocase; content:"http"; within:50; nocase; classtype:web-application-attack; sid:1000003; rev:1;)

@@ -1,0 +1,5 @@
+# Detect regsvr32 DLL registration via remote scriptlet (Squiblydoo)
+alert tcp any any -> any any (msg:"LOLBIN - regsvr32 /i:sct Remote Payload (Squiblydoo)"; content:"regsvr32.exe"; nocase; content:".sct"; within:50; nocase; classtype:suspicious-filename-detect; sid:1000011; rev:1;)
+
+# Detect regsvr32 registering COM objects
+alert tcp any any -> any any (msg:"LOLBIN - regsvr32 registering suspicious COM DLL"; content:"regsvr32.exe"; nocase; content:".dll"; within:50; nocase; classtype:suspicious-filename-detect; sid:1000012; rev:1;)
